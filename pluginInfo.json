@@ -3,9 +3,9 @@
     "name": "Simple Countdown",
     "author": "Rick Harris",
     "description": "This plugin will give you a countdown to a specified date",
-    "homeURL": "https://github.com/Poporacer/FPP-Simple-Countdown/FPP-Simple-Countdown",
-    "srcURL": "https://github.com/Poporacer/FPP-Simple-Countdown/FPP-Simple-Countdown.git",
-    "bugURL": "https://github.com/Poporacer/FPP-Simple-Countdown/FPP-Simple-Countdown/issues",
+    "homeURL": "https://github.com/Poporacer/FPP-Simple-Countdown",
+    "srcURL": "https://github.com/Poporacer/FPP-Simple-Countdown.git",
+    "bugURL": "https://github.com/Poporacer/FPP-Simple-Countdown/issues",
     "allowUpdates": 1,
     "versions": [
             {
