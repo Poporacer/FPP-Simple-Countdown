@@ -244,8 +244,12 @@ if ($d >= 1){
 		}	
 	
 } 
+if ($m <0){
+		$messageText= "Countdown complete! Your target is in the past.";
+	}else{
+		$messageText .= " ".$postText. " ".$eventName;
+	}
 
-$messageText .= " ".$postText. " ".$eventName;
 
 $messageText = preg_replace('!\s+!', ' ', $messageText);
 
@@ -255,7 +259,7 @@ logEntry("ScrollText options-hostLocation=  ".$hostLocation. " Position= " .$Pos
 
 ScrollText($hostLocation, $overlayModel, $messageText, $Position, $font, $fontSize, $color, $scrollSpeed, $fontAntialias, $duration, $auto);
 
-	exit(0);
+	exit(0); //is this needed?
 	
 	
 ?>

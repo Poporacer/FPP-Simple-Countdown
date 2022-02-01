@@ -2,50 +2,88 @@
 
 
 include_once "/opt/fpp/www/common.php";
-include_once "functions.inc.php";
-include_once "commonFunctions.inc.php";
-include_once "MatrixFunctions.inc.php";
-
-
+include_once 'functions.inc.php';
 include_once 'version.inc';
+
 $pluginName = basename(dirname(__FILE__));
 
 
-$fpp_matrixtools_Plugin = "fpp-matrixtools";
-$fpp_matrixtools_Plugin_Script = "scripts/matrixtools";
-$fpp_message_queue_Plugin = "FPP-Plugin-MessageQueue";
-$FPP_MATRIX_PLUGIN_ENABLED=false;
+//include $messageQueuePluginPath . "functions.inc.php";
+
+//$PLAYLIST_NAME="";
+//$fpp_matrixtools_Plugin = "fpp-matrixtools";
+//$fpp_matrixtools_Plugin_Script = "scripts/matrixtools";
+//$messageQueue_Plugin = "FPP-Plugin-MessageQueue";
+//$matrixMessage_Plugin = "FPP-Plugin-Matrix-Message";
+//$messageQueuePluginPath = $settings['pluginDirectory'] . "/" . $messageQueue_Plugin."/";
+
+//include $messageQueuePluginPath . "functions.inc.php";
+
+//$MESSAGE_QUEUE_PLUGIN_ENABLED=false;
+
+
 $logFile = $settings['logDirectory']."/".$pluginName.".log";
-$gitURL = "https://github.com/FalconChristmas/FPP-Plugin-Matrix-Message.git";
 
-
-
-if (isset($pluginSettings['DEBUG'])) {
-    $DEBUG = urldecode($pluginSettings['DEBUG']);
-} else {
-    $DEBUG = false;
+$showDiv="display:none";
+if (isset($pluginSettings['SCROLL_SPEED'])){
+	$scrollSpeed= $pluginSettings['SCROLL_SPEED'];
+	if ($scrollSpeed==0){
+		$showDiv="display:block";
+	}else{
+		$showDiv="display:none";
+	}
+	
 }
 
-	
-if(file_exists($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools_Plugin_Script) && file_exists($pluginDirectory."/".$fpp_message_queue_Plugin ))  { // show error message if required plugins not installed
+//$messageQueueFile = urldecode(ReadSettingFromFile("MESSAGE_FILE", $messageQueue_Plugin));
+/**
+if(file_exists( $pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools_Plugin_Script) && file_exists( $pluginDirectory."/".$messageQueue_Plugin )&& file_exists( $pluginDirectory."/".$matrixMessage_Plugin )){
 	logEntry($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools_Plugin_Script." EXISTS: Enabling");
-	$FPP_MATRIX_PLUGIN_ENABLED=true;
+	$MESSAGE_QUEUE_PLUGIN_ENABLED=true;
+
 } else {
-	if (!file_exists($pluginDirectory."/".$fpp_message_queue_Plugin )){
+	if (!file_exists($pluginDirectory."/".$fpp_message_queue_Plugin )) {
 		logEntry("Message Queue to Matrix Overlay plugin is not installed, cannot use this plugin with out it");
 		echo "<h1>Message Queue to Matrix Overlay is not installed. Install the plugin and revisit this page to continue.</h1><br/>";	
 	}
-	if (!file_exists($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools_Plugin_Script)){
+	if (!file_exists($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools_Plugin_Script)) {
 	logEntry("FPP Matrix tools plugin is not installed, cannot use this plugin with out it");
 	echo "<h1>FPP Matrix Tools plugin is not installed. Install the plugin and revisit this page to continue.</h1>";
 	}
+	if (!file_exists($pluginDirectory."/".$matrixMessage_Plugin)){
+		logEntry("FPP Matrix Message plugin is not installed, cannot use this plugin with out it");
+		echo "<h1>FPP Matrix Message plugin is not installed. Install the plugin and revisit this page to continue.</h1>";
+	}
+
 	exit(0);
-	
 }
 
-?>
-<style>
+**/
+$gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 
+
+//$pluginUpdateFile = $settings['pluginDirectory']."/".$pluginName."/"."pluginUpdate.inc";
+
+
+//logEntry("plugin update file: " . $pluginUpdateFile);
+
+
+//if (isset($pluginSettings['DEBUG'])) {
+//    $DEBUG = $pluginSettings['DEBUG'];
+//}
+
+
+//$Plugin_DBName = $messageQueueFile;
+	
+//$db = new SQLite3($Plugin_DBName) or die('Unable to open database');
+	
+//create the default tables if they do not exist!
+//createTables();
+?>
+
+<html>
+<head>
+<style>
 .matrix-tool-bottom-panel {
 	padding-top: 0px !important;
 }
@@ -60,14 +98,6 @@ if(file_exists($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools
 
 .blue {
 	background: #0000ff;
-}
-
-.yellow {
-	background: #ffff00;
-}
-
-.orange {
-	background: #ff8800;
 }
 
 .white {
@@ -93,6 +123,50 @@ if(file_exists($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools
 #currentColor {
     border: 2px solid #000000;
 }
+#scroll-container {
+  border: 3px solid black;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#scroll-text {
+	
+	font-weight: bold; 
+	font-size: 30px;
+	
+  /* animation properties */
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+  
+  -moz-animation: my-animation 15s linear infinite;
+  -webkit-animation: my-animation 15s linear infinite;
+  animation: my-animation 15s linear infinite;
+}
+
+/* for Firefox */
+@-moz-keyframes my-animation {
+  from { -moz-transform: translateX(100%); }
+  to { -moz-transform: translateX(-100%); }
+}
+
+/* for Chrome */
+@-webkit-keyframes my-animation {
+  from { -webkit-transform: translateX(100%); }
+  to { -webkit-transform: translateX(-100%); }
+}
+
+@keyframes my-animation {
+  from {
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+  to {
+    -moz-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }	
 
 </style>
 <script type="text/javascript">
@@ -110,7 +184,7 @@ if(file_exists($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools
 			color = '#' + color;
 
         pluginSettings['COLOR'] = color;
-        SetPluginSetting('FPP-Plugin-Matrix-Message', 'COLOR', color, 0, 0);
+        SetPluginSetting('FPP-Plugin-EventDate', 'COLOR', color, 0, 0);
         $('#currentColor').css('background-color', color);
 
 		currentColor = color;
@@ -123,86 +197,102 @@ if(file_exists($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools
 
 </script>
 
+</head>
 
-<div id="<?echo $pluginName;?>" class="settings">
-<fieldset>
-<legend><?php echo $pluginName." Version: ".$pluginVersion;?> Support Instructions</legend>
-
-<p>Known Issues:
-<ul>
-<li>NONE</li>
-</ul>
-<p>Configuration:
-<ul>
-<li>This plugin allows you to use the fpp-matrixtools plugin to output messages from the MessageQueue system</li>
-<li>Select your plugins to output to your matrix below and click SAVE</li>
-<li>Configure your Matrix first before selecting here</li>
-</ul>
-
-
+<div id="EventDate" class="settings">
+	<fieldset>
+		<legend><?php echo $pluginName . " Version: ". $pluginVersion;?> Installation Instructions</legend>
+		<p><b>This plugin requires ACCURATE date and time for its calculation.</b></p>
+		Configuration:
+		<ul>
+		<li>Configure the date and time of your event</li>
+		<li>Enter in the Pre Text and Post Text that will appear in your countdown</li>
+		<li>Enter the name of your Target date</li>
+		<li>Make sure you have your Pixel Overlay Model Selected (usually your Matrix)</li>
+		<li>The Countdown will display immediatly when activated by an FPP Command or Command Preset</li>
+		<li>If the remaining time is less than a day, the plugin will automatically display the hours and minutes remaining.</li>
+		</ul>
+	</fieldset>
 </div>
-<input type=hidden name=LAST_READ value= <? $LAST_READ ?>> <!-- is this needed?? -->
-<p>ENABLE PLUGIN: <?PrintSettingCheckbox("Matrix Message Plugin", "ENABLED", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "", $changedFunction = ""); ?> </p>
-<p>Matrix Name: <? PrintSettingSelect("MATRIX", "MATRIX", 0, 0, $defaultValue="", $values = GetOverlayList(), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
-<p>Overlay Mode: <? PrintSettingSelect("OVERLAY_MODE", "OVERLAY_MODE", 0, 0, "", Array("Full Overlay" => "1", "Transparent" => "2", "Transparent RGB" => "3"), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
-<p><h3>The Overlay mode determines how you want your message to display.</h3>
-<ul>
-	<li>Full Overlay- This will blank out the model and only display your message</li>
-	<li>Transparent- This will display your message over the top of whatever is displaying on your matrix <br/>
-		but the colors will blend slightly with what is currently being displayed</li>
-	<li>Transparent RGB- This will display your message over the top of whatever is displaying on your matrix <br/>
-		the colors will override what is currently being displayed</li> 
-</ul>
-<p>Include Time: <?PrintSettingCheckbox("Include Time", "INCLUDE_TIME", 0, 0, "on", "off", $pluginName , ""); ?> 
- Time Format: <? PrintSettingSelect("Time Format", "TIME_FORMAT", 0, 0, $defaultValue="HH:MM", Array("HH:MM" => "h:i", "HH:MM:SS" => "h:i:s"), $pluginName, $callbackName = "", $changedFunction = ""); ?> 
- Hour Format: <? PrintSettingSelect("Hour Format", "HOUR_FORMAT", 0, 0, $defaultValue="24 Hour", Array("24 Hour" => "24", "12 Hour" => "12"), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
-<p>Plugins to use: <? PrintSettingMultiSelect("PLUGINS", "PLUGINS", 0, 0, $defaultValue="", $values = getInstalledPlugins($host=""), $pluginName, $callbackName = "", $changedFunction = ""); ?></p>
-<p>Font: <? PrintSettingSelect("FONT", "FONT", 0, 0, $defaultValue="", getFontsInstalled(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
- Font Size: <? PrintSettingSelect("FONT_SIZE", "FONT_SIZE", 0, 0, $defaultValue="20", getFontSizes(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
- Anti-Aliased: <?PrintSettingCheckbox("FONT_ANTIALIAS", "FONT_ANTIALIAS", 0, 0, "1", "", $pluginName , ""); ?> 
- Scroll Speed: <? PrintSettingSelect("PIXELS_PER_SECOND", "PIXELS_PER_SECOND", 0, 0, $defaultValue="20", getScrollSpeed(), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
-Duration: <? PrintSettingSelect("DURATION", "DURATION", 0, 0, $defaultValue="10", getDuration(), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
-<p><b>If you set the scroll speed to 0, then the message will display on the center of the matrix <br/>
-for the number of seconds set in the Duration</b></p> 
-<div id= "divCanvas" class='ui-tabs-panel matrix-tool-bottom-panel'>
-			<table border=0>
-            <tr><td valign='top'>
+<div>
+	<p>Target Date: <? PrintSettingSelect("MONTH", "MONTH", 0, 0, $defaultValue= "1", getMonths(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?> 
+	<? PrintSettingSelect("DAY", "DAY", 0, 0, $defaultValue= "1", getDaysOfMonth(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
+	<? PrintSettingSelect("YEAR", "YEAR", 0, 0, $defaultValue= date("Y")+1, getYears(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
+	Hour: <? PrintSettingSelect("HOUR", "HOUR", 0, 0, $defaultValue= "0", getHours(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
+	Min: <? PrintSettingSelect("MIN", "MIN", 0, 0, $defaultValue= "0", getMinutes(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?></p>
+	<p>Pre Text: <?  PrintSettingTextSaved("PRE_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "It is", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+	<p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbspxx days xx hours</p>
+	<p>Post Text <?  PrintSettingTextSaved("POST_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "until", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+	<p>Target Title: <?  PrintSettingTextSaved("EVENT_NAME", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "The Event!", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+
+
+
+	<p><h3>If the remaining time is more than a day then you can select to include the hours and/or minutes.</br>
+	</h3></p>
+	<p>Include Hours: <?PrintSettingCheckbox("INCLUDE_HOURS", "INCLUDE_HOURS", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextHours", $changedFunction = ""); ?> </p>
+	<p>Include Minutes: <?PrintSettingCheckbox("INCLUDE_MINUTES", "INCLUDE_MINUTES", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextMinutes", $changedFunction = ""); ?> </p>
+	<p>Your message will appear as:</p>
+	<div class= "marquee" id="scroll-container" >
+		<p id="scroll-text">Countdown </p>
+	</div>
+	<br /><p>Font: <? PrintSettingSelect("FONT", "FONT", 0, 0, $defaultValue="", getFontsInstalled(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
+	Font Size: <? PrintSettingSelect("FONT_SIZE", "FONT_SIZE", 0, 0, $defaultValue="20", getFontSizes(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
+	Anti-Aliased: <?PrintSettingCheckbox("FONT_ANTIALIAS", "FONT_ANTIALIAS", 0, 0, "1", "", $pluginName , ""); ?></p> 
+	
+	<div id= "divCanvas" class='ui-tabs-panel matrix-tool-bottom-panel'>
+		<table border=0>
+			<tr><td valign='top'>
 			<div>
 				<table border=0>
 					<tr><td valign='top'>Pallette:</td>
 						<td><div class='colorButton red' onClick='setColor("#ff0000");'></div>
 							<div class='colorButton green' onClick='setColor("#00ff00");'></div>
 							<div class='colorButton blue' onClick='setColor("#0000ff");'></div>
-						    <div class='colorButton white' onClick='setColor("#ffffff");'></div>
+							<div class='colorButton white' onClick='setColor("#ffffff");'></div>
 							<div class='colorButton black' onClick='setColor("#000000");'></div>
 						</td>
 					</tr>
-                    <tr><td>Current Color:</td><td><span id='currentColor'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>
-            <tr><td colspan='2'>Show Color Picker: <? PrintSettingCheckbox("Show Color Picker", "ShowColorPicker", 0, 0, "1", "0", "FPP-Plugin-Matrix-Message", "ShowColorPicker"); ?></td></tr>
-            <tr><td valign='top' colspan='2'>
-                <div id="colpicker"></div>
-			</td></tr>
+					<tr><td>Current Color:</td><td><span id='currentColor'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>
+					<tr><td colspan='2'>Show Color Picker: <? PrintSettingCheckbox("Show Color Picker", "ShowColorPicker", 0, 0, "1", "0", $pluginName, "ShowColorPicker"); ?></td></tr>
+					<tr><td valign='top' colspan='2'>
+					<div id="colpicker"></div>
+					</td></tr>
 				</table>
 			</div>
 			</td></tr>
-            </table>
-			
-			
-				
-		</div>
+		</table>
+	</div>
+	<p><b>If you set the scroll speed to 0, then the message will display on the center of the matrix <br/>
+	for the number of seconds set in the Duration</b></p> 
+	Scroll Speed: <? PrintSettingSelect("SCROLL_SPEED", "SCROLL_SPEED", 0, 0, $defaultValue="20", getScrollSpeed(), $pluginName, $callbackName = "ShowDuration", $changedFunction = ""); ?> </p>
+	<div id="showDuration" style= "<? echo $showDiv; ?>">
+		Duration: <? PrintSettingSelect("DURATION", "DURATION", 0, 0, $defaultValue="10", getDuration(), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
+	</div>
+	
+	<p>Matrix Name: <? PrintSettingSelect("MATRIX", "MATRIX", 0, 0, $defaultValue="", $values = GetOverlayList(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
+	If this is blank, then you need to configure the correct Pixel Overlay Model</p>
+	<p>Overlay Mode: <? PrintSettingSelect("OVERLAY_MODE", "OVERLAY_MODE", 0, 0, "", Array("Full Overlay" => "1", "Transparent" => "2", "Transparent RGB" => "3"), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
+	<p><h3>The Overlay mode determines how you want your message to display.</h3>
+	<ul>
+		<li>Full Overlay- This will blank out the model and only display your message</li>
+		<li>Transparent- This will display your message over the top of whatever is displaying on your matrix <br/>
+		but the colors will blend slightly with what is currently being displayed</li>
+		<li>Transparent RGB- This will display your message over the top of whatever is displaying on your matrix <br/>
+		the colors will override what is currently being displayed</li> 
+	</ul>
+	
+	
+	
+	
+	<p>ENABLE PLUGIN: <?PrintSettingCheckbox("Event Date Plugin", "ENABLED", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "", $changedFunction=""); ?> </p>
+	<p>To report a bug, please file it against Simple Countdown plugin project on Git:<? echo $gitURL;?> 
 
-
-<p>To report a bug, please file it against <?php echo $gitURL;?>
-
-
-
-</fieldset>
 </div>
-<br />
-</html>
-<script>
 
-	$("#matrixTabs").tabs({active: 0, cache: true, spinner: "", fx: { opacity: 'toggle', height: 'toggle' } });
+<script>
+updateOutputText();
+
+$("#matrixTabs").tabs({active: 0, cache: true, spinner: "", fx: { opacity: 'toggle', height: 'toggle' } });
 
     var colpickTimer = null;
 	$('#colpicker').colpick({
@@ -222,9 +312,112 @@ for the number of seconds set in the Duration</b></p>
         currentColor = pluginSettings['COLOR'];
         $('#currentColor').css('background-color', currentColor);
     }
+function updateOutputTextHours(updateOutput){
+updateOutputText();	
+}
 
-    ShowColorPicker();
-	GetBlockList();
-    GetFontList();
+function updateOutputTextMinutes(updateOutput){
+updateOutputText();	
+}
+function updateOutputText(){
+	
+	var messageText= getMessageText();
+	document.getElementById("scroll-text").innerHTML = messageText;
+}
+function getMessageText(){
+	var eventName = document.getElementById("EVENT_NAME").value;
+	var eventMonth = parseInt(document.getElementById("MONTH").value)-1;
+	var eventDay = document.getElementById("DAY").value;
+	var eventYear = document.getElementById("YEAR").value;
+	var eventHour = document.getElementById("HOUR").value;
+	var eventMin = document.getElementById("MIN").value;
+	var preText = document.getElementById("PRE_TEXT").value;
+	var postText = document.getElementById("POST_TEXT").value;
+	var incHours = document.getElementById("INCLUDE_HOURS").checked;
+	var incMin = document.getElementById("INCLUDE_MINUTES").checked;
+	var eventDate = new Date(eventYear, eventMonth, eventDay, eventHour, eventMin  );
+	var currentDate= new Date();
+	var rawTimeDiff = Math.floor((eventDate - currentDate)/1000);
+	var yearsToDate = Math.floor(rawTimeDiff/(60*60*24*365));
+	var daysToDate = Math.floor(rawTimeDiff/(60*60*24))%365;
+	var hoursToDate = Math.floor(rawTimeDiff/(60*60))%24;
+	var minutesToDate = Math.floor(rawTimeDiff/60)%60 +1;
+	var messageText = preText;
+	var elapsed = "false" //for later use when elapsed times  can be used
+	
+	if (yearsToDate >= 1){
+		if (yearsToDate >=2){
+			messageText += " " + yearsToDate + " years ";
+		}else {
+			messageText += " " + yearsToDate + " year ";
+		}
+	}else{
+		messageText += " ";
+	}
 
+	if (daysToDate >= 1){
+		if (daysToDate >=2){
+			messageText += daysToDate + " days ";
+		} else {
+			messageText += daysToDate + " day ";			
+		}
+		if(incHours == true){			
+			if (hoursToDate >=2) {
+				messageText += hoursToDate + " hours ";
+			} else {
+				if (hoursToDate >= 1) {
+					messageText += hoursToDate + " hour ";
+				}
+			}
+		}
+		
+		if(incMin == true){
+			if(incHours == false){
+					minutesToDate += hoursToDate*60;
+			}
+			if (minutesToDate >=2) {
+				messageText += minutesToDate + " minutes ";
+			} else {
+				messageText += minutesToDate + " minute ";
+			}	
+		}
+	}else {
+			
+		if (hoursToDate >=2) {
+			messageText += hoursToDate + " hours ";
+		} else {
+			if (hoursToDate >= 1) {
+				messageText += hoursToDate + " hour ";
+			}
+		}
+		
+		if (minutesToDate >=2) {
+			messageText += minutesToDate + " minutes ";
+		} else {
+			messageText += minutesToDate + " minute ";
+		}	
+	}           
+        
+	if (minutesToDate <0){
+		messageText= "Countdown complete! Your target is in the past.";
+	}else{
+		messageText += postText + " " + eventName;
+	}
+	//document.getElementById('scroll-container').style.color = 'red'; //for future use if elapsed times are implemented
+	
+	return messageText;
+	
+	
+}
+function ShowDuration(){
+		var scrollSpeed = document.getElementById('SCROLL_SPEED').value;
+		if (scrollSpeed ==0){
+			document.getElementById('showDuration').style.display = "block";
+		}else{
+				document.getElementById('showDuration').style.display = "none";
+		}
+}
+ShowColorPicker();
 </script>
+
+</html>
