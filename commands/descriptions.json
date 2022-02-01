@@ -1,0 +1,7 @@
+[
+    { "name": "Run Simple Countdown",
+      "script": "RUN-SIMPLE_COUNTDOWN-SCRIPT.sh",
+      "args": [
+      ]
+    }
+]
