@@ -1,23 +1,17 @@
 {
-    "repoName": "FPP-Plugin-EventDate",
-    "name": "Event Date",
-    "author": "Ben Shaver (bshaver) and Steve Smock, updated by Rick Harris",
+    "repoName": "FPP-Simple-Countdown",
+    "name": "Simple Countdown",
+    "author": "Rick Harris based on ",
     "description": "This plugin will give you a countdown to a specified date",
-    "homeURL": "https://github.com/FalconChristmas/FPP-Plugin-EventDate",
-    "srcURL": "https://github.com/FalconChristmas/FPP-Plugin-EventDate.git",
-    "bugURL": "https://github.com/FalconChristmas/FPP-Plugin-EventDate/issues",
+    "homeURL": "https://github.com/FalconChristmas/FPP-Simple-Countdown",
+    "srcURL": "https://github.com/FalconChristmas/FPP-Simple-Countdown.git",
+    "bugURL": "https://github.com/FalconChristmas/FPP-Simple-Countdown/issues",
     "allowUpdates": 1,
     "versions": [
-         {
-            "minFPPVersion": "2.7",
-            "maxFPPVersion": "4.6.9",
-            "branch": "master",
-            "sha": ""
-        },
-        {
-                "minFPPVersion": "5.0",
+            {
+                "minFPPVersion": "4.6",
                 "maxFPPVersion": "0",
-                "branch": "Command-Preset",
+                "branch": "master",
                 "sha": ""
             }
     ]
