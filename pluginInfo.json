@@ -1,7 +1,7 @@
 {
     "repoName": "FPP-Simple-Countdown",
     "name": "Simple Countdown",
-    "author": "Rick Harris based on ",
+    "author": "Rick Harris",
     "description": "This plugin will give you a countdown to a specified date",
     "homeURL": "https://github.com/FalconChristmas/FPP-Simple-Countdown",
     "srcURL": "https://github.com/FalconChristmas/FPP-Simple-Countdown.git",
