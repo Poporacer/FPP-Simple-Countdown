@@ -2,7 +2,7 @@
     "repoName": "FPP-Simple-Countdown",
     "name": "Simple Countdown",
     "author": "Rick Harris",
-    "description": "This plugin will give you a countdown to a specified date",
+    "description": "This plugin will give you a countdown to a specified date. This plugin is standalone and does not require any other plugins to run.",
     "homeURL": "https://github.com/Poporacer/FPP-Simple-Countdown",
     "srcURL": "https://github.com/Poporacer/FPP-Simple-Countdown.git",
     "bugURL": "https://github.com/Poporacer/FPP-Simple-Countdown/issues",
