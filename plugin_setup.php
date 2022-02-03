@@ -139,7 +139,6 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 
         if (updateColpicker)
 		    $('#colpicker').colpickSetColor(color);
-
 		
 	}
 
