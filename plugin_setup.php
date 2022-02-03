@@ -8,18 +8,6 @@ include_once 'version.inc';
 $pluginName = basename(dirname(__FILE__));
 
 
-//include $messageQueuePluginPath . "functions.inc.php";
-
-//$PLAYLIST_NAME="";
-//$fpp_matrixtools_Plugin = "fpp-matrixtools";
-//$fpp_matrixtools_Plugin_Script = "scripts/matrixtools";
-//$messageQueue_Plugin = "FPP-Plugin-MessageQueue";
-//$matrixMessage_Plugin = "FPP-Plugin-Matrix-Message";
-//$messageQueuePluginPath = $settings['pluginDirectory'] . "/" . $messageQueue_Plugin."/";
-
-//include $messageQueuePluginPath . "functions.inc.php";
-
-//$MESSAGE_QUEUE_PLUGIN_ENABLED=false;
 
 
 $logFile = $settings['logDirectory']."/".$pluginName.".log";
@@ -35,50 +23,10 @@ if (isset($pluginSettings['SCROLL_SPEED'])){
 	
 }
 
-//$messageQueueFile = urldecode(ReadSettingFromFile("MESSAGE_FILE", $messageQueue_Plugin));
-/**
-if(file_exists( $pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools_Plugin_Script) && file_exists( $pluginDirectory."/".$messageQueue_Plugin )&& file_exists( $pluginDirectory."/".$matrixMessage_Plugin )){
-	logEntry($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools_Plugin_Script." EXISTS: Enabling");
-	$MESSAGE_QUEUE_PLUGIN_ENABLED=true;
 
-} else {
-	if (!file_exists($pluginDirectory."/".$fpp_message_queue_Plugin )) {
-		logEntry("Message Queue to Matrix Overlay plugin is not installed, cannot use this plugin with out it");
-		echo "<h1>Message Queue to Matrix Overlay is not installed. Install the plugin and revisit this page to continue.</h1><br/>";	
-	}
-	if (!file_exists($pluginDirectory."/".$fpp_matrixtools_Plugin."/".$fpp_matrixtools_Plugin_Script)) {
-	logEntry("FPP Matrix tools plugin is not installed, cannot use this plugin with out it");
-	echo "<h1>FPP Matrix Tools plugin is not installed. Install the plugin and revisit this page to continue.</h1>";
-	}
-	if (!file_exists($pluginDirectory."/".$matrixMessage_Plugin)){
-		logEntry("FPP Matrix Message plugin is not installed, cannot use this plugin with out it");
-		echo "<h1>FPP Matrix Message plugin is not installed. Install the plugin and revisit this page to continue.</h1>";
-	}
-
-	exit(0);
-}
-
-**/
 $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 
 
-//$pluginUpdateFile = $settings['pluginDirectory']."/".$pluginName."/"."pluginUpdate.inc";
-
-
-//logEntry("plugin update file: " . $pluginUpdateFile);
-
-
-//if (isset($pluginSettings['DEBUG'])) {
-//    $DEBUG = $pluginSettings['DEBUG'];
-//}
-
-
-//$Plugin_DBName = $messageQueueFile;
-	
-//$db = new SQLite3($Plugin_DBName) or die('Unable to open database');
-	
-//create the default tables if they do not exist!
-//createTables();
 ?>
 
 <html>
@@ -184,7 +132,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 			color = '#' + color;
 
         pluginSettings['COLOR'] = color;
-        SetPluginSetting('FPP-Plugin-EventDate', 'COLOR', color, 0, 0);
+        SetPluginSetting('<?php echo $pluginName; ?>', 'COLOR', color, 0, 0);
         $('#currentColor').css('background-color', color);
 
 		currentColor = color;
