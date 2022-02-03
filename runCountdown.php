@@ -253,7 +253,6 @@ if ($m <0){
 		$messageText .= " ".$postText. " ".$eventName;
 	}
 
-
 $messageText = preg_replace('!\s+!', ' ', $messageText);
 
 logEntry("RunEventDate.php- messageText= ".$messageText);
