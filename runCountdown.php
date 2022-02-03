@@ -25,7 +25,7 @@ if (isset($pluginSettings['ENABLED'])){
 }
 
 if ($enabled !="ON"){
-	logEntry("RunEventDate.php-Plugin has not been enabled, exiting");
+	logEntry("Plugin has not been enabled, exiting");
 	exit(0);
 }
 
@@ -33,70 +33,70 @@ if (isset($pluginSettings['EVENT_NAME'])){
     $eventName = $pluginSettings['EVENT_NAME'];
 }else{
 	$eventName ="The Event!";
-	logEntry("RunEventDate.php-Event Name not specifically defined, using default The Event!");
+	logEntry("Event Name not specifically defined, using default The Event!");
 }
 
 if (isset($pluginSettings['MONTH'])){
     $month = $pluginSettings['MONTH'];
 }else{
 	$month ="1";
-	logEntry("RunEventDate.php-Month not specifically defined, using default of January");
+	logEntry("Month not specifically defined, using default of January");
 }
 
 if (isset($pluginSettings['DAY'])){
     $day = $pluginSettings['DAY'];
 }else{
 	$day ="1";
-	logEntry("RunEventDate.php-Day not specifically defined, using default of 1");
+	logEntry("Day not specifically defined, using default of 1");
 }
 
 if (isset($pluginSettings['YEAR'])){
     $year = $pluginSettings['YEAR'];
 }else{
 	$year = date("Y")+1;
-	logEntry("RunEventDate.php-Year not specifically defined, using default of next year");
+	logEntry("Year not specifically defined, using default of next year");
 }
 
 if (isset($pluginSettings['HOUR'])){
     $hour = $pluginSettings['HOUR'];
 }else{
 	$hour = "0";
-	logEntry("RunEventDate.php-Hour not specifically defined, using default");
+	logEntry("Hour not specifically defined, using default");
 }
 
 if (isset($pluginSettings['MIN'])){
     $minute = $pluginSettings['MIN'];
 }else{
 	$minute = "0";
-	logEntry("RunEventDate.php-Minutes not specifically defined, using default");
+	logEntry("Minutes not specifically defined, using default");
 }
 
 if (isset($pluginSettings['PRE_TEXT'])){
     $preText = $pluginSettings['PRE_TEXT'];
 }else{
 	$preText = "It is";
-	logEntry("RunEventDate.php-Pre Text not specifically defined, using default");
+	logEntry("Pre Text not specifically defined, using default");
 }
 
 if (isset($pluginSettings['POST_TEXT'])){
     $postText = $pluginSettings['POST_TEXT'];
 }else{
 	$postText = "until";
-	logEntry("RunEventDate.php-Post Text not specifically defined, using default");
+	logEntry("Post Text not specifically defined, using default");
 }
 
 if (isset($pluginSettings['INCLUDE_HOURS'])){
     $includeHours = $pluginSettings['INCLUDE_HOURS'];
 }else{
 	$includeHours = "";
-	logEntry("RunEventDate.php-Include hours not specifically defined, using default");
+	logEntry("Include hours not specifically defined, using default");
 }
 
 if (isset($pluginSettings['INCLUDE_MINUTES'])){
     $includeMinutes = $pluginSettings['INCLUDE_MINUTES'];
 }else{
 	$includeMinutes = "";
-	logEntry("RunEventDate.php-Include minutes not specifically defined, using default");
+	logEntry("Include minutes not specifically defined, using default");
 }
 
 if (isset($pluginSettings['HOST_LOCATION']))
@@ -106,7 +106,10 @@ if (isset($pluginSettings['OVERLAY_MODEL'])){
     $overlayModel = urldecode($pluginSettings['OVERLAY_MODEL']);
 }else{
     $overlayModel = reset(GetOverlayList());
-    logEntry("RunEventDate.php-Overlay Model not specifically defined, using default Overlay instead");
+	if ($overlayModel ==""){
+		logEntry("****ERROR**** Overlay Model not specifically defined and there are no Pixel Overlay Models defined");
+	}
+    logEntry("Overlay Model not specifically defined, using default Overlay instead");
 }
 
 
@@ -255,11 +258,10 @@ $messageText = preg_replace('!\s+!', ' ', $messageText);
 
 logEntry("RunEventDate.php- messageText= ".$messageText);
 //error_log("RunEventDate.php- messageText= ".$messageText);
-logEntry("ScrollText options-hostLocation=  ".$hostLocation. " Position= " .$Position. " Font = " .$font. " fontsize= " .$fontSize. " fontColor= " .$color. " scrollSpeed= " .$scrollSpeed. " Auto= " .$auto." duration= " .$duration);
+logEntry("ScrollText options-hostLocation=  ".$hostLocation. " overlayModel= ".$overlayModel. " Position= " .$Position. " Font = " .$font. " fontsize= " .$fontSize. " fontColor= " .$color. " scrollSpeed= " .$scrollSpeed. " Auto= " .$auto." duration= " .$duration);
 
 ScrollText($hostLocation, $overlayModel, $messageText, $Position, $font, $fontSize, $color, $scrollSpeed, $fontAntialias, $duration, $auto);
 
 	exit(0); //is this needed?
-	
 	
 ?>
