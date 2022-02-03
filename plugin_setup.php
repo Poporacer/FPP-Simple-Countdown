@@ -8,8 +8,6 @@ include_once 'version.inc';
 $pluginName = basename(dirname(__FILE__));
 
 
-
-
 $logFile = $settings['logDirectory']."/".$pluginName.".log";
 
 $showDiv="display:none";
