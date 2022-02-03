@@ -21,7 +21,6 @@ if (isset($pluginSettings['SCROLL_SPEED'])){
 	
 }
 
-
 $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 
 
