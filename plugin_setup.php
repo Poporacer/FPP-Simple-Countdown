@@ -114,52 +114,6 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
   }
 }
 
-/**
- * Tabs
- */
-.tabs {
-	display: flex;
-	flex-wrap: wrap; // make sure it wraps
-}
-.tabs label {
-	order: 1; // Put the labels first
-	display: block;
-	padding: 1rem 2rem;
-	margin-right: 0.2rem;
-	cursor: pointer;
-  background: #90CAF9;
-  font-weight: bold;
-  transition: background ease 0.2s;
-}
-.tabs .tab {
-  order: 99; // Put the tabs last
-  flex-grow: 1;
-	width: 100%;
-	display: none;
-  padding: 1rem;
-  background: #fff;
-}
-.tabs input[type="radio"] {
-	display: none;
-}
-.tabs input[type="radio"]:checked + label {
-	background: #fff;
-}
-.tabs input[type="radio"]:checked + label + .tab {
-	display: block;
-}
-
-@media (max-width: 45em) {
-  .tabs .tab,
-  .tabs label {
-    order: initial;
-  }
-  .tabs label {
-    width: 100%;
-    margin-right: 0;
-    margin-top: 0.2rem;
-  }
-}
 
 </style>
 <script type="text/javascript">
@@ -190,10 +144,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 </script>
 
 </head>
-<div class="tabs">
-	<input type="radio" name="tabs" id="tabone" checked="checked">
-  	<label for="tabone">Configuration</label>
-  	<div class="tab">
+
     	<div id="EventDate" class="settings">
 			<fieldset>
 				<legend><?php echo $pluginName . " Version: ". $pluginVersion;?> Installation Instructions</legend>
@@ -283,25 +234,12 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		<p>To report a bug, please file it against Simple Countdown plugin project on Git:<? echo $gitURL;?> 
 
 	</div>
-	</div>
-	<input type="radio" name="tabs" id="tabtwo">
-  <label for="tabtwo">Tab Two</label>
-  <div class="tab">
-    <h1>Tab Two Content</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  </div>
-  
-  <input type="radio" name="tabs" id="tabthree">
-  <label for="tabthree">Advanced</label>
-  <div class="tab">
-    
-  </div>
-</div>
+	
 
 <script>
 updateOutputText();
 
-$("#matrixTabs").tabs({active: 0, cache: true, spinner: "", fx: { opacity: 'toggle', height: 'toggle' } });
+//$("#matrixTabs").tabs({active: 0, cache: true, spinner: "", fx: { opacity: 'toggle', height: 'toggle' } });
 
     var colpickTimer = null;
 	$('#colpicker').colpick({
