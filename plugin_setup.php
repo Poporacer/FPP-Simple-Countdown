@@ -213,7 +213,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		Duration: <? PrintSettingSelect("DURATION", "DURATION", 0, 0, $defaultValue="10", getDuration(), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
 	</div>
 	
-	<p>Matrix Name: <? PrintSettingSelect("MATRIX", "MATRIX", 0, 0, $defaultValue="", $values = GetOverlayList(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
+	<p>Matrix Name: <? PrintSettingSelect("OVERLAY_MODEL", "OVERLAY_MODEL", 0, 0, $defaultValue="", $values = GetOverlayList(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
 	If this is blank, then you need to configure the correct Pixel Overlay Model</p>
 	<p>Overlay Mode: <? PrintSettingSelect("OVERLAY_MODE", "OVERLAY_MODE", 0, 0, "", Array("Full Overlay" => "1", "Transparent" => "2", "Transparent RGB" => "3"), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
 	<p><h3>The Overlay mode determines how you want your message to display.</h3>
