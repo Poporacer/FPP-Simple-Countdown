@@ -111,7 +111,55 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
     -moz-transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
-  }	
+  }
+}
+
+/**
+ * Tabs
+ */
+.tabs {
+	display: flex;
+	flex-wrap: wrap; // make sure it wraps
+}
+.tabs label {
+	order: 1; // Put the labels first
+	display: block;
+	padding: 1rem 2rem;
+	margin-right: 0.2rem;
+	cursor: pointer;
+  background: #90CAF9;
+  font-weight: bold;
+  transition: background ease 0.2s;
+}
+.tabs .tab {
+  order: 99; // Put the tabs last
+  flex-grow: 1;
+	width: 100%;
+	display: none;
+  padding: 1rem;
+  background: #fff;
+}
+.tabs input[type="radio"] {
+	display: none;
+}
+.tabs input[type="radio"]:checked + label {
+	background: #fff;
+}
+.tabs input[type="radio"]:checked + label + .tab {
+	display: block;
+}
+
+@media (max-width: 45em) {
+  .tabs .tab,
+  .tabs label {
+    order: initial;
+  }
+  .tabs label {
+    width: 100%;
+    margin-right: 0;
+    margin-top: 0.2rem;
+  }
+}
 
 </style>
 <script type="text/javascript">
@@ -142,95 +190,112 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 </script>
 
 </head>
+<div class="tabs">
+	<input type="radio" name="tabs" id="tabone" checked="checked">
+  	<label for="tabone">Configuration</label>
+  	<div class="tab">
+    	<div id="EventDate" class="settings">
+			<fieldset>
+				<legend><?php echo $pluginName . " Version: ". $pluginVersion;?> Installation Instructions</legend>
+				<p><b>This plugin requires ACCURATE date and time for its calculation.</b></p>
+				Configuration:
+				<ul>
+				<li>Configure the date and time of your event</li>
+				<li>Enter in the Pre Text and Post Text that will appear in your countdown</li>
+				<li>Enter the name of your Target date</li>
+				<li>Make sure you have your Pixel Overlay Model Selected (usually your Matrix)</li>
+				<li>The Countdown will display immediatly when activated by an FPP Command or Command Preset</li>
+				<li>If the remaining time is less than a day, the plugin will automatically display the hours and minutes remaining.</li>
+				</ul>
+			</fieldset>
+		</div>
+	<div>
+		<p>Target Date: <? PrintSettingSelect("MONTH", "MONTH", 0, 0, $defaultValue= "1", getMonths(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?> 
+		<? PrintSettingSelect("DAY", "DAY", 0, 0, $defaultValue= "1", getDaysOfMonth(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
+		<? PrintSettingSelect("YEAR", "YEAR", 0, 0, $defaultValue= date("Y")+1, getYears(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
+		Hour: <? PrintSettingSelect("HOUR", "HOUR", 0, 0, $defaultValue= "0", getHours(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
+		Min: <? PrintSettingSelect("MIN", "MIN", 0, 0, $defaultValue= "0", getMinutes(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?></p>
+		<p>Pre Text: <?  PrintSettingTextSaved("PRE_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "It is", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+		<p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbspxx days xx hours</p>
+		<p>Post Text <?  PrintSettingTextSaved("POST_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "until", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+		<p>Target Title: <?  PrintSettingTextSaved("EVENT_NAME", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "The Event!", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
 
-<div id="EventDate" class="settings">
-	<fieldset>
-		<legend><?php echo $pluginName . " Version: ". $pluginVersion;?> Installation Instructions</legend>
-		<p><b>This plugin requires ACCURATE date and time for its calculation.</b></p>
-		Configuration:
+
+
+		<p><h3>If the remaining time is more than a day then you can select to include the hours and/or minutes.</br>
+		</h3></p>
+		<p>Include Hours: <?PrintSettingCheckbox("INCLUDE_HOURS", "INCLUDE_HOURS", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextHours", $changedFunction = ""); ?> </p>
+		<p>Include Minutes: <?PrintSettingCheckbox("INCLUDE_MINUTES", "INCLUDE_MINUTES", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextMinutes", $changedFunction = ""); ?> </p>
+		<p>Your message will appear as:</p>
+		<div class= "marquee" id="scroll-container" >
+			<p id="scroll-text">Countdown </p>
+		</div>
+		<br /><p>Font: <? PrintSettingSelect("FONT", "FONT", 0, 0, $defaultValue="", getFontsInstalled(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
+		Font Size: <? PrintSettingSelect("FONT_SIZE", "FONT_SIZE", 0, 0, $defaultValue="20", getFontSizes(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
+		Anti-Aliased: <?PrintSettingCheckbox("FONT_ANTIALIAS", "FONT_ANTIALIAS", 0, 0, "1", "", $pluginName , ""); ?></p> 
+		
+		<div id= "divCanvas" class='ui-tabs-panel matrix-tool-bottom-panel'>
+			<table border=0>
+				<tr><td valign='top'>
+				<div>
+					<table border=0>
+						<tr><td valign='top'>Pallette:</td>
+							<td><div class='colorButton red' onClick='setColor("#ff0000");'></div>
+								<div class='colorButton green' onClick='setColor("#00ff00");'></div>
+								<div class='colorButton blue' onClick='setColor("#0000ff");'></div>
+								<div class='colorButton white' onClick='setColor("#ffffff");'></div>
+								<div class='colorButton black' onClick='setColor("#000000");'></div>
+							</td>
+						</tr>
+						<tr><td>Current Color:</td><td><span id='currentColor'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>
+						<tr><td colspan='2'>Show Color Picker: <? PrintSettingCheckbox("Show Color Picker", "ShowColorPicker", 0, 0, "1", "0", $pluginName, "ShowColorPicker"); ?></td></tr>
+						<tr><td valign='top' colspan='2'>
+						<div id="colpicker"></div>
+						</td></tr>
+					</table>
+				</div>
+				</td></tr>
+			</table>
+		</div>
+		<p><b>If you set the scroll speed to 0, then the message will display on the center of the matrix <br/>
+		for the number of seconds set in the Duration</b></p> 
+		Scroll Speed: <? PrintSettingSelect("SCROLL_SPEED", "SCROLL_SPEED", 0, 0, $defaultValue="20", getScrollSpeed(), $pluginName, $callbackName = "ShowDuration", $changedFunction = ""); ?> </p>
+		<div id="showDuration" style= "<? echo $showDiv; ?>">
+			Duration: <? PrintSettingSelect("DURATION", "DURATION", 0, 0, $defaultValue="10", getDuration(), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
+		</div>
+		
+		<p>Matrix Name: <? PrintSettingSelect("OVERLAY_MODEL", "OVERLAY_MODEL", 0, 0, $defaultValue="", $values = GetOverlayList(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
+		If this is blank, then you need to configure the correct Pixel Overlay Model</p>
+		<p>Overlay Mode: <? PrintSettingSelect("OVERLAY_MODE", "OVERLAY_MODE", 0, 0, "", Array("Full Overlay" => "1", "Transparent" => "2", "Transparent RGB" => "3"), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
+		<p><h3>The Overlay mode determines how you want your message to display.</h3>
 		<ul>
-		<li>Configure the date and time of your event</li>
-		<li>Enter in the Pre Text and Post Text that will appear in your countdown</li>
-		<li>Enter the name of your Target date</li>
-		<li>Make sure you have your Pixel Overlay Model Selected (usually your Matrix)</li>
-		<li>The Countdown will display immediatly when activated by an FPP Command or Command Preset</li>
-		<li>If the remaining time is less than a day, the plugin will automatically display the hours and minutes remaining.</li>
+			<li>Full Overlay- This will blank out the model and only display your message</li>
+			<li>Transparent- This will display your message over the top of whatever is displaying on your matrix <br/>
+			but the colors will blend slightly with what is currently being displayed</li>
+			<li>Transparent RGB- This will display your message over the top of whatever is displaying on your matrix <br/>
+			the colors will override what is currently being displayed</li> 
 		</ul>
-	</fieldset>
-</div>
-<div>
-	<p>Target Date: <? PrintSettingSelect("MONTH", "MONTH", 0, 0, $defaultValue= "1", getMonths(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?> 
-	<? PrintSettingSelect("DAY", "DAY", 0, 0, $defaultValue= "1", getDaysOfMonth(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
-	<? PrintSettingSelect("YEAR", "YEAR", 0, 0, $defaultValue= date("Y")+1, getYears(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
-	Hour: <? PrintSettingSelect("HOUR", "HOUR", 0, 0, $defaultValue= "0", getHours(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
-	Min: <? PrintSettingSelect("MIN", "MIN", 0, 0, $defaultValue= "0", getMinutes(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?></p>
-	<p>Pre Text: <?  PrintSettingTextSaved("PRE_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "It is", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
-	<p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbspxx days xx hours</p>
-	<p>Post Text <?  PrintSettingTextSaved("POST_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "until", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
-	<p>Target Title: <?  PrintSettingTextSaved("EVENT_NAME", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "The Event!", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+		
+		
+		
+		
+		<p>ENABLE PLUGIN: <?PrintSettingCheckbox("Event Date Plugin", "ENABLED", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "", $changedFunction=""); ?> </p>
+		<p>To report a bug, please file it against Simple Countdown plugin project on Git:<? echo $gitURL;?> 
 
-
-
-	<p><h3>If the remaining time is more than a day then you can select to include the hours and/or minutes.</br>
-	</h3></p>
-	<p>Include Hours: <?PrintSettingCheckbox("INCLUDE_HOURS", "INCLUDE_HOURS", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextHours", $changedFunction = ""); ?> </p>
-	<p>Include Minutes: <?PrintSettingCheckbox("INCLUDE_MINUTES", "INCLUDE_MINUTES", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextMinutes", $changedFunction = ""); ?> </p>
-	<p>Your message will appear as:</p>
-	<div class= "marquee" id="scroll-container" >
-		<p id="scroll-text">Countdown </p>
 	</div>
-	<br /><p>Font: <? PrintSettingSelect("FONT", "FONT", 0, 0, $defaultValue="", getFontsInstalled(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
-	Font Size: <? PrintSettingSelect("FONT_SIZE", "FONT_SIZE", 0, 0, $defaultValue="20", getFontSizes(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
-	Anti-Aliased: <?PrintSettingCheckbox("FONT_ANTIALIAS", "FONT_ANTIALIAS", 0, 0, "1", "", $pluginName , ""); ?></p> 
-	
-	<div id= "divCanvas" class='ui-tabs-panel matrix-tool-bottom-panel'>
-		<table border=0>
-			<tr><td valign='top'>
-			<div>
-				<table border=0>
-					<tr><td valign='top'>Pallette:</td>
-						<td><div class='colorButton red' onClick='setColor("#ff0000");'></div>
-							<div class='colorButton green' onClick='setColor("#00ff00");'></div>
-							<div class='colorButton blue' onClick='setColor("#0000ff");'></div>
-							<div class='colorButton white' onClick='setColor("#ffffff");'></div>
-							<div class='colorButton black' onClick='setColor("#000000");'></div>
-						</td>
-					</tr>
-					<tr><td>Current Color:</td><td><span id='currentColor'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>
-					<tr><td colspan='2'>Show Color Picker: <? PrintSettingCheckbox("Show Color Picker", "ShowColorPicker", 0, 0, "1", "0", $pluginName, "ShowColorPicker"); ?></td></tr>
-					<tr><td valign='top' colspan='2'>
-					<div id="colpicker"></div>
-					</td></tr>
-				</table>
-			</div>
-			</td></tr>
-		</table>
 	</div>
-	<p><b>If you set the scroll speed to 0, then the message will display on the center of the matrix <br/>
-	for the number of seconds set in the Duration</b></p> 
-	Scroll Speed: <? PrintSettingSelect("SCROLL_SPEED", "SCROLL_SPEED", 0, 0, $defaultValue="20", getScrollSpeed(), $pluginName, $callbackName = "ShowDuration", $changedFunction = ""); ?> </p>
-	<div id="showDuration" style= "<? echo $showDiv; ?>">
-		Duration: <? PrintSettingSelect("DURATION", "DURATION", 0, 0, $defaultValue="10", getDuration(), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
-	</div>
-	
-	<p>Matrix Name: <? PrintSettingSelect("OVERLAY_MODEL", "OVERLAY_MODEL", 0, 0, $defaultValue="", $values = GetOverlayList(), $pluginName, $callbackName = "", $changedFunction = ""); ?>
-	If this is blank, then you need to configure the correct Pixel Overlay Model</p>
-	<p>Overlay Mode: <? PrintSettingSelect("OVERLAY_MODE", "OVERLAY_MODE", 0, 0, "", Array("Full Overlay" => "1", "Transparent" => "2", "Transparent RGB" => "3"), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
-	<p><h3>The Overlay mode determines how you want your message to display.</h3>
-	<ul>
-		<li>Full Overlay- This will blank out the model and only display your message</li>
-		<li>Transparent- This will display your message over the top of whatever is displaying on your matrix <br/>
-		but the colors will blend slightly with what is currently being displayed</li>
-		<li>Transparent RGB- This will display your message over the top of whatever is displaying on your matrix <br/>
-		the colors will override what is currently being displayed</li> 
-	</ul>
-	
-	
-	
-	
-	<p>ENABLE PLUGIN: <?PrintSettingCheckbox("Event Date Plugin", "ENABLED", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "", $changedFunction=""); ?> </p>
-	<p>To report a bug, please file it against Simple Countdown plugin project on Git:<? echo $gitURL;?> 
-
+	<input type="radio" name="tabs" id="tabtwo">
+  <label for="tabtwo">Tab Two</label>
+  <div class="tab">
+    <h1>Tab Two Content</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  </div>
+  
+  <input type="radio" name="tabs" id="tabthree">
+  <label for="tabthree">Advanced</label>
+  <div class="tab">
+    
+  </div>
 </div>
 
 <script>
