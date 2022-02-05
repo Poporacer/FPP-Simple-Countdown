@@ -10,13 +10,26 @@ $pluginName = basename(dirname(__FILE__));
 
 $logFile = $settings['logDirectory']."/".$pluginName.".log";
 
-$showDiv="display:none";
+$showScrollDiv="display:none";
 if (isset($pluginSettings['SCROLL_SPEED'])){
 	$scrollSpeed= $pluginSettings['SCROLL_SPEED'];
 	if ($scrollSpeed==0){
-		$showDiv="display:block";
+		$showScrollDiv	="display:block";
 	}else{
-		$showDiv="display:none";
+		$showScrollDiv ="display:none";
+	}
+	
+}
+
+$showCountUpDiv="display:none";
+$showCompleteDiv= "display:block";
+if (isset($pluginSettings['COUNT_UP'])){
+	$countUp= $pluginSettings['COUNT_UP'];
+	if ($countUp=="ON"){
+		$showCountUpDiv	="display:block";
+		$showCompleteDiv= "display:none";
+	}else{
+		$showCountUpDiv ="display:none";
 	}
 	
 }
@@ -114,52 +127,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
   }
 }
 
-/**
- * Tabs
- */
-.tabs {
-	display: flex;
-	flex-wrap: wrap; // make sure it wraps
-}
-.tabs label {
-	order: 1; // Put the labels first
-	display: block;
-	padding: 1rem 2rem;
-	margin-right: 0.2rem;
-	cursor: pointer;
-  background: #90CAF9;
-  font-weight: bold;
-  transition: background ease 0.2s;
-}
-.tabs .tab {
-  order: 99; // Put the tabs last
-  flex-grow: 1;
-	width: 100%;
-	display: none;
-  padding: 1rem;
-  background: #fff;
-}
-.tabs input[type="radio"] {
-	display: none;
-}
-.tabs input[type="radio"]:checked + label {
-	background: #fff;
-}
-.tabs input[type="radio"]:checked + label + .tab {
-	display: block;
-}
 
-@media (max-width: 45em) {
-  .tabs .tab,
-  .tabs label {
-    order: initial;
-  }
-  .tabs label {
-    width: 100%;
-    margin-right: 0;
-    margin-top: 0.2rem;
-  }
-}
 
 </style>
 <script type="text/javascript">
@@ -190,10 +158,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 </script>
 
 </head>
-<div class="tabs">
-	<input type="radio" name="tabs" id="tabone" checked="checked">
-  	<label for="tabone">Configuration</label>
-  	<div class="tab">
+
     	<div id="EventDate" class="settings">
 			<fieldset>
 				<legend><?php echo $pluginName . " Version: ". $pluginVersion;?> Installation Instructions</legend>
@@ -206,10 +171,13 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 				<li>Make sure you have your Pixel Overlay Model Selected (usually your Matrix)</li>
 				<li>The Countdown will display immediatly when activated by an FPP Command or Command Preset</li>
 				<li>If the remaining time is less than a day, the plugin will automatically display the hours and minutes remaining.</li>
+				<li>You can configure the plugin to display a message once the target date/time has been reached or</li>
+				<li>have the plugin start counting up from the target date/time.
 				</ul>
 			</fieldset>
 		</div>
 	<div>
+		<p>Count up once target date has been reached: <?PrintSettingCheckbox("COUNT_UP", "COUNT_UP", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "ShowCountUp", $changedFunction = ""); ?> </p>
 		<p>Target Date: <? PrintSettingSelect("MONTH", "MONTH", 0, 0, $defaultValue= "1", getMonths(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?> 
 		<? PrintSettingSelect("DAY", "DAY", 0, 0, $defaultValue= "1", getDaysOfMonth(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
 		<? PrintSettingSelect("YEAR", "YEAR", 0, 0, $defaultValue= date("Y")+1, getYears(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
@@ -219,9 +187,12 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		<p>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbspxx days xx hours</p>
 		<p>Post Text <?  PrintSettingTextSaved("POST_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "until", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
 		<p>Target Title: <?  PrintSettingTextSaved("EVENT_NAME", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "The Event!", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
-
-
-
+		<div id ="showCompleted" style= "<? echo $showCompleteDiv; ?>">
+			<p>Countdown Completed Text: <?  PrintSettingTextSaved("COMPLETED_MESSAGE", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "Countdown Completed!", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+		</div>
+		<div id = "showCountUp" style= "<? echo $showCountUpDiv; ?>">
+			<p>Count Up Pre Text: <?  PrintSettingTextSaved("COUNTUP_PRE_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "It has been", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+		</div>
 		<p><h3>If the remaining time is more than a day then you can select to include the hours and/or minutes.</br>
 		</h3></p>
 		<p>Include Hours: <?PrintSettingCheckbox("INCLUDE_HOURS", "INCLUDE_HOURS", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextHours", $changedFunction = ""); ?> </p>
@@ -260,7 +231,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		<p><b>If you set the scroll speed to 0, then the message will display on the center of the matrix <br/>
 		for the number of seconds set in the Duration</b></p> 
 		Scroll Speed: <? PrintSettingSelect("SCROLL_SPEED", "SCROLL_SPEED", 0, 0, $defaultValue="20", getScrollSpeed(), $pluginName, $callbackName = "ShowDuration", $changedFunction = ""); ?> </p>
-		<div id="showDuration" style= "<? echo $showDiv; ?>">
+		<div id="showDuration" style= "<? echo $showScrollDiv; ?>">
 			Duration: <? PrintSettingSelect("DURATION", "DURATION", 0, 0, $defaultValue="10", getDuration(), $pluginName, $callbackName = "", $changedFunction = ""); ?> </p>
 		</div>
 		
@@ -283,19 +254,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		<p>To report a bug, please file it against Simple Countdown plugin project on Git:<? echo $gitURL;?> 
 
 	</div>
-	</div>
-	<input type="radio" name="tabs" id="tabtwo">
-  <label for="tabtwo">Tab Two</label>
-  <div class="tab">
-    <h1>Tab Two Content</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  </div>
   
-  <input type="radio" name="tabs" id="tabthree">
-  <label for="tabthree">Advanced</label>
-  <div class="tab">
-    
-  </div>
 </div>
 
 <script>
@@ -419,12 +378,22 @@ function getMessageText(){
 	
 }
 function ShowDuration(){
-		var scrollSpeed = document.getElementById('SCROLL_SPEED').value;
-		if (scrollSpeed ==0){
-			document.getElementById('showDuration').style.display = "block";
+	var scrollSpeed = document.getElementById('SCROLL_SPEED').value;
+	if (scrollSpeed ==0){
+		document.getElementById('showDuration').style.display = "block";
+	}else{
+		document.getElementById('showDuration').style.display = "none";
+	}
+}
+function ShowCountUp(){
+	var showCountUp = document.getElementById('COUNT_UP').text;
+		if (showCountUp =="ON"){
+			document.getElementById('showCountUp').style.display = "block";
+			document.getElementById('showCompleted').style.display = "none";
 		}else{
-				document.getElementById('showDuration').style.display = "none";
-		}
+				document.getElementById('showCountUp').style.display = "none";
+				document.getElementById('showCompleted').style.display = "block";
+		}	
 }
 ShowColorPicker();
 </script>
