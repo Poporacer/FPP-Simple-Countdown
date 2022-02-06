@@ -340,7 +340,6 @@ function getMessageText(){
 		messagePreText= preText;
 		messagePostText= postText;	
 	}
-
 			
 	yearsToDate= Math.floor(Math.abs(yearsToDate));
 	daysToDate= Math.floor(Math.abs(daysToDate));
