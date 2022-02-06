@@ -127,8 +127,6 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
   }
 }
 
-
-
 </style>
 <script type="text/javascript">
 
@@ -262,11 +260,14 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 	</div>
   
 </div>
+</div>
+	
+
 
 <script>
 updateOutputText();
 
-$("#matrixTabs").tabs({active: 0, cache: true, spinner: "", fx: { opacity: 'toggle', height: 'toggle' } });
+//$("#matrixTabs").tabs({active: 0, cache: true, spinner: "", fx: { opacity: 'toggle', height: 'toggle' } });
 
     var colpickTimer = null;
 	$('#colpicker').colpick({
