@@ -177,7 +177,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 			</fieldset>
 		</div>
 	<div>
-		<p>Count up once target date has been reached: <?PrintSettingCheckbox("COUNT_UP", "COUNT_UP", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "ShowCountUp", $changedFunction = ""); ?> </p>
+		
 		<p>Target Date: <? PrintSettingSelect("MONTH", "MONTH", 0, 0, $defaultValue= "1", getMonths(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?> 
 		<? PrintSettingSelect("DAY", "DAY", 0, 0, $defaultValue= "1", getDaysOfMonth(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
 		<? PrintSettingSelect("YEAR", "YEAR", 0, 0, $defaultValue= date("Y")+1, getYears(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?>
@@ -198,6 +198,8 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		</h3></p>
 		<p>Include Hours: <?PrintSettingCheckbox("INCLUDE_HOURS", "INCLUDE_HOURS", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextHours", $changedFunction = ""); ?> </p>
 		<p>Include Minutes: <?PrintSettingCheckbox("INCLUDE_MINUTES", "INCLUDE_MINUTES", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextMinutes", $changedFunction = ""); ?> </p>
+		<p>Count up once target date has been reached: <?PrintSettingCheckbox("COUNT_UP", "COUNT_UP", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "ShowCountUp", $changedFunction = ""); ?> 
+		With this set, when the target date/time is reached, the counter will count up using the Count Up text. If not, it will use the Completed Text.</p>
 		<p>Your message will appear as:</p>
 		<div class= "marquee" id="scroll-container" >
 			<p id="scroll-text">Countdown </p>
@@ -253,7 +255,10 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		
 		<p>ENABLE PLUGIN: <?PrintSettingCheckbox("Event Date Plugin", "ENABLED", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "", $changedFunction=""); ?> </p>
 		<p>To report a bug, please file it against Simple Countdown plugin project on Git:<? echo $gitURL;?> 
-
+		<p>Host Location: <?  PrintSettingTextSaved("HOST_LOCATION", 0, 0, $maxlength = 16, $size = 16, $pluginName, $defaultValue = "127.0.0.1", $callbackName = "", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+		<p>The default location of 127.0.0.1 is used if you want to display your Countdown on an Overlay Model directly connected to this device. <br />
+		You can send the Countdown text to another FPP device by entering that IP address for the Host Location. The Host location will need <br />
+		to have the Pixel Overlay Model defined and this FPP will need to have the Pixel Overlay Model defined exactly as the Host FPP Device</p>
 	</div>
   
 </div>
@@ -306,6 +311,7 @@ function getMessageText(){
 	var postText = document.getElementById("POST_TEXT").value;
 	var CountUpPreText = document.getElementById("COUNTUP_PRE_TEXT").value;
 	var CountUpPostText = document.getElementById("COUNTUP_POST_TEXT").value;
+	var completedText = document.getElementById("COMPLETED_MESSAGE").value;
 	var incHours = document.getElementById("INCLUDE_HOURS").checked;
 	var incMin = document.getElementById("INCLUDE_MINUTES").checked;
 	var countup = document.getElementById("COUNT_UP").checked;
@@ -336,6 +342,9 @@ function getMessageText(){
 	daysToDate= Math.floor(Math.abs(daysToDate));
 	hoursToDate =Math.floor(Math.abs(hoursToDate));
 	minutesToDate= Math.floor(Math.abs(minutesToDate));
+	if (elapsed && countup){
+		minutesToDate+= 1;
+	}
 
 	messageText = messagePreText;
 
@@ -394,8 +403,8 @@ function getMessageText(){
 		}	
 	}           
         
-	if (minutesToDate <0 && !messagePostText){
-		messageText= COMPLETED_MESSAGE;
+	if (elapsed && !countup){
+		messageText= completedText;
 	}else{
 		messageText += messagePostText + " " + eventName;
 	}
