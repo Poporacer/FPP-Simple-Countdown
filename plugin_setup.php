@@ -254,7 +254,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		
 		
 		<p>ENABLE PLUGIN: <?PrintSettingCheckbox("Event Date Plugin", "ENABLED", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "", $changedFunction=""); ?> </p>
-		<p>To report a bug, please file it against Simple Countdown plugin project on Git:<? echo $gitURL;?> 
+		<p>To report a bug, please file it against Simple Countdown plugin project on Git:<? echo $gitURL;?> </p>
 		<p>Host Location: <?  PrintSettingTextSaved("HOST_LOCATION", 0, 0, $maxlength = 16, $size = 16, $pluginName, $defaultValue = "127.0.0.1", $callbackName = "", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
 		<p>The default location of 127.0.0.1 is used if you want to display your Countdown on an Overlay Model directly connected to this device. <br />
 		You can send the Countdown text to another FPP device by entering that IP address for the Host Location. The Host location will need <br />
