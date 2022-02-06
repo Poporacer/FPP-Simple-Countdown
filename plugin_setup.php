@@ -328,7 +328,10 @@ function getMessageText(){
 	if (rawTimeDiff<0){
 		elapsed= true;
 	}
-
+	if (elapsed && !countup){
+		messageText= completedText;
+		return messageText;
+	}
 	if (elapsed && countup){
 		messagePreText= CountUpPreText;
 		messagePostText= CountUpPostText;
@@ -403,18 +406,11 @@ function getMessageText(){
 		}	
 	}           
         
-	if (elapsed && !countup){
-		messageText= completedText;
-	}else{
-		messageText += messagePostText + " " + eventName;
-	}
 	
-	
-	
+	messageText += messagePostText + " " + eventName;
 	return messageText;
-	
-	
 }
+
 function ShowDuration(){
 	var scrollSpeed = document.getElementById('SCROLL_SPEED').value;
 	if (scrollSpeed ==0){
@@ -427,9 +423,11 @@ function ShowCountUp(){
 	if (document.getElementById('COUNT_UP').checked == true){
 		document.getElementById('showCountUp').style.display = "block";
 		document.getElementById('showCompleted').style.display = "none";
+		updateOutputText();
 	}else{
 		document.getElementById('showCountUp').style.display = "none";
 		document.getElementById('showCompleted').style.display = "block";
+		updateOutputText();
 	}	
 }
 ShowColorPicker();
