@@ -192,6 +192,7 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		</div>
 		<div id = "showCountUp" style= "<? echo $showCountUpDiv; ?>">
 			<p>Count Up Pre Text: <?  PrintSettingTextSaved("COUNTUP_PRE_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "It has been", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
+			<p>Count Up Post Text: <?  PrintSettingTextSaved("COUNTUP_POST_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "since", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
 		</div>
 		<p><h3>If the remaining time is more than a day then you can select to include the hours and/or minutes.</br>
 		</h3></p>
@@ -293,6 +294,7 @@ function updateOutputText(){
 	document.getElementById("scroll-text").innerHTML = messageText;
 }
 function getMessageText(){
+	var elapsed = false; 
 	var eventName = document.getElementById("EVENT_NAME").value;
 	var eventMonth = parseInt(document.getElementById("MONTH").value)-1;
 	var eventDay = document.getElementById("DAY").value;
@@ -301,24 +303,49 @@ function getMessageText(){
 	var eventMin = document.getElementById("MIN").value;
 	var preText = document.getElementById("PRE_TEXT").value;
 	var postText = document.getElementById("POST_TEXT").value;
+	var postText = document.getElementById("POST_TEXT").value;
+	var CountUpPreText = document.getElementById("COUNTUP_PRE_TEXT").value;
+	var CountUpPostText = document.getElementById("COUNTUP_POST_TEXT").value;
 	var incHours = document.getElementById("INCLUDE_HOURS").checked;
 	var incMin = document.getElementById("INCLUDE_MINUTES").checked;
+	var countup = document.getElementById("COUNT_UP").checked;
 	var eventDate = new Date(eventYear, eventMonth, eventDay, eventHour, eventMin  );
 	var currentDate= new Date();
-	var rawTimeDiff = Math.floor((eventDate - currentDate)/1000);
-	var yearsToDate = Math.floor(rawTimeDiff/(60*60*24*365));
-	var daysToDate = Math.floor(rawTimeDiff/(60*60*24))%365;
-	var hoursToDate = Math.floor(rawTimeDiff/(60*60))%24;
-	var minutesToDate = Math.floor(rawTimeDiff/60)%60 +1;
-	var messageText = preText;
-	var elapsed = "false" //for later use when elapsed times  can be used
-	
+	var rawTimeDiff = (eventDate - currentDate)/1000; 
+	var yearsToDate = rawTimeDiff/(60*60*24*365);
+	var daysToDate = (rawTimeDiff/(60*60*24))%365;
+	var hoursToDate = (rawTimeDiff/(60*60))%24;
+	var minutesToDate = (rawTimeDiff/60)%60 +1;
+	var messageText;
+	var messagePreText;
+	var messagePostText;
+	if (rawTimeDiff<0){
+		elapsed= true;
+	}
+
+	if (elapsed && countup){
+		messagePreText= CountUpPreText;
+		messagePostText= CountUpPostText;
+	}else{
+		messagePreText= preText;
+		messagePostText= postText;	
+	}
+
+			
+	yearsToDate= Math.floor(Math.abs(yearsToDate));
+	daysToDate= Math.floor(Math.abs(daysToDate));
+	hoursToDate =Math.floor(Math.abs(hoursToDate));
+	minutesToDate= Math.floor(Math.abs(minutesToDate));
+
+	messageText = messagePreText;
+
 	if (yearsToDate >= 1){
 		if (yearsToDate >=2){
 			messageText += " " + yearsToDate + " years ";
 		}else {
 			messageText += " " + yearsToDate + " year ";
 		}
+
 	}else{
 		messageText += " ";
 	}
@@ -329,6 +356,7 @@ function getMessageText(){
 		} else {
 			messageText += daysToDate + " day ";			
 		}
+
 		if(incHours == true){			
 			if (hoursToDate >=2) {
 				messageText += hoursToDate + " hours ";
@@ -341,21 +369,21 @@ function getMessageText(){
 		
 		if(incMin == true){
 			if(incHours == false){
-					minutesToDate += hoursToDate*60;
+				minutesToDate += hoursToDate*60;
 			}
 			if (minutesToDate >=2) {
 				messageText += minutesToDate + " minutes ";
 			} else {
 				messageText += minutesToDate + " minute ";
 			}	
-		}
+		}	
 	}else {
 			
 		if (hoursToDate >=2) {
 			messageText += hoursToDate + " hours ";
 		} else {
 			if (hoursToDate >= 1) {
-				messageText += hoursToDate + " hour ";
+					messageText += hoursToDate + " hour ";
 			}
 		}
 		
@@ -366,12 +394,13 @@ function getMessageText(){
 		}	
 	}           
         
-	if (minutesToDate <0){
-		messageText= "Countdown complete! Your target is in the past.";
+	if (minutesToDate <0 && !messagePostText){
+		messageText= COMPLETED_MESSAGE;
 	}else{
-		messageText += postText + " " + eventName;
+		messageText += messagePostText + " " + eventName;
 	}
-	//document.getElementById('scroll-container').style.color = 'red'; //for future use if elapsed times are implemented
+	
+	
 	
 	return messageText;
 	
@@ -386,14 +415,13 @@ function ShowDuration(){
 	}
 }
 function ShowCountUp(){
-	var showCountUp = document.getElementById('COUNT_UP').text;
-		if (showCountUp =="ON"){
-			document.getElementById('showCountUp').style.display = "block";
-			document.getElementById('showCompleted').style.display = "none";
-		}else{
-				document.getElementById('showCountUp').style.display = "none";
-				document.getElementById('showCompleted').style.display = "block";
-		}	
+	if (document.getElementById('COUNT_UP').checked == true){
+		document.getElementById('showCountUp').style.display = "block";
+		document.getElementById('showCompleted').style.display = "none";
+	}else{
+		document.getElementById('showCountUp').style.display = "none";
+		document.getElementById('showCompleted').style.display = "block";
+	}	
 }
 ShowColorPicker();
 </script>
