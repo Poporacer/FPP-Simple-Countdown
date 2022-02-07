@@ -192,12 +192,12 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 			<p>Count Up Pre Text: <?  PrintSettingTextSaved("COUNTUP_PRE_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "It has been", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
 			<p>Count Up Post Text: <?  PrintSettingTextSaved("COUNTUP_POST_TEXT", 0, 0, $maxlength = 32, $size = 32, $pluginName, $defaultValue = "since", $callbackName = "updateOutputText", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
 		</div>
+		<p>Count up: <?PrintSettingCheckbox("COUNT_UP", "COUNT_UP", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "ShowCountUp", $changedFunction = ""); ?> 
+		With this set, when the target date/time is reached, the counter will count up using the Count Up text. If not, it will use the Completed Text.</p>
 		<p><h3>If the remaining time is more than a day then you can select to include the hours and/or minutes.</br>
 		</h3></p>
 		<p>Include Hours: <?PrintSettingCheckbox("INCLUDE_HOURS", "INCLUDE_HOURS", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextHours", $changedFunction = ""); ?> </p>
 		<p>Include Minutes: <?PrintSettingCheckbox("INCLUDE_MINUTES", "INCLUDE_MINUTES", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "updateOutputTextMinutes", $changedFunction = ""); ?> </p>
-		<p>Count up once target date has been reached: <?PrintSettingCheckbox("COUNT_UP", "COUNT_UP", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "ShowCountUp", $changedFunction = ""); ?> 
-		With this set, when the target date/time is reached, the counter will count up using the Count Up text. If not, it will use the Completed Text.</p>
 		<p>Your message will appear as:</p>
 		<div class= "marquee" id="scroll-container" >
 			<p id="scroll-text">Countdown </p>
@@ -309,9 +309,8 @@ function getMessageText(){
 	var eventMin = document.getElementById("MIN").value;
 	var preText = document.getElementById("PRE_TEXT").value;
 	var postText = document.getElementById("POST_TEXT").value;
-	var postText = document.getElementById("POST_TEXT").value;
 	var CountUpPreText = document.getElementById("COUNTUP_PRE_TEXT").value;
-	var CountUpPostText = document.getElementById("COUNTUP_POST_TEXT").value;
+	var CountUpPostText = document.getElementById("COUNTUP_POST_TEXT").value;	
 	var completedText = document.getElementById("COMPLETED_MESSAGE").value;
 	var incHours = document.getElementById("INCLUDE_HOURS").checked;
 	var incMin = document.getElementById("INCLUDE_MINUTES").checked;
@@ -333,20 +332,20 @@ function getMessageText(){
 		messageText= completedText;
 		return messageText;
 	}
-	if (elapsed && countup){
-		messagePreText= CountUpPreText;
-		messagePostText= CountUpPostText;
-	}else{
-		messagePreText= preText;
-		messagePostText= postText;	
-	}
+	
 			
 	yearsToDate= Math.floor(Math.abs(yearsToDate));
 	daysToDate= Math.floor(Math.abs(daysToDate));
 	hoursToDate =Math.floor(Math.abs(hoursToDate));
 	minutesToDate= Math.floor(Math.abs(minutesToDate));
+	
 	if (elapsed && countup){
+		messagePreText= CountUpPreText;
+		messagePostText= CountUpPostText;
 		minutesToDate+= 1;
+	}else{
+		messagePreText= preText;
+		messagePostText= postText;	
 	}
 
 	messageText = messagePreText;

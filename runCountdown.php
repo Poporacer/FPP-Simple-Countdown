@@ -21,10 +21,7 @@ if (isset($pluginSettings['ENABLED'])){
     $enabled = $pluginSettings['ENABLED'];
 	
 }else{
-     $enabled ="";
-}
-
-if ($enabled !="ON"){
+    $enabled ="";
 	logEntry("Plugin has not been enabled, exiting");
 	exit(0);
 }
@@ -83,6 +80,34 @@ if (isset($pluginSettings['POST_TEXT'])){
 }else{
 	$postText = "until";
 	logEntry("Post Text not specifically defined, using default");
+}
+
+if (isset($pluginSettings['COUNTUP_PRE_TEXT'])){
+    $countUpPreText = $pluginSettings['COUNTUP_PRE_TEXT'];
+}else{
+	$countUpPreText = "It has been";
+	logEntry("Count up Pre Text not specifically defined, using default");
+}
+
+if (isset($pluginSettings['COUNTUP_POST_TEXT'])){
+    $countUpPostText = $pluginSettings['COUNTUP_POST_TEXT'];
+}else{
+	$countUpPostText = "since";
+	logEntry("Count up Post Text not specifically defined, using default");
+}
+
+if (isset($pluginSettings['COMPLETED_MESSAGE'])){
+    $completedText = $pluginSettings['COMPLETED_MESSAGE'];
+}else{
+	$completedText  = "since";
+	logEntry("Completed Text not specifically defined, using default");
+}
+
+if (isset($pluginSettings['COUNT_UP'])){
+    $countup = $pluginSettings['COUNT_UP'];
+}else{
+	$countup  = "";
+	logEntry("Count up not specifically defined, using default of off");
 }
 
 if (isset($pluginSettings['INCLUDE_HOURS'])){
@@ -189,15 +214,28 @@ $date1 = strtotime($strEventDate);
 
 $date2 = time();
 $subTime = $date1 - $date2;
+$elapsed=false;
 
-$y = ($subTime/(60*60*24*365));
-$d = ($subTime/(60*60*24))%365;
-$h = ($subTime/(60*60))%24;
-$m = ($subTime/60)%60 +1;
+if ($subTime<0){
+	$elapsed=true;
+}
+
+$y = abs($subTime/(60*60*24*365));
+$d = abs(($subTime/(60*60*24))%365);
+$h = abs(($subTime/(60*60))%24);
+$m = abs(($subTime/60)%60 +1+;
+if ($elapsed){
+	$messagePreText = $countUpPreText;
+	$messagePostText = $countUpPostText;
+	$m +=1;	
+}else{
+	$messagePreText = $preText;
+	$messagePostText = $postText;	
+}
 
 logEntry( "Difference between ".date('Y-m-d H:i:s',$date1)." and ".date('Y-m-d H:i:s',$date2)." is:".$y." years ".$d." days ".$h." hours ".$m." minutes");
 
-$messageText = $preText;
+$messageText = $messagePreText;
 if ($y >= 1){
 	if ($y >=2){
 		$messageText .= intval($y). " years ";
@@ -207,6 +245,7 @@ if ($y >= 1){
 } else {
 	$messageText .= " ";
 }
+
 if ($d >= 1){
 	if ($d >=2){
 		$messageText .= intval($d). " days ";
@@ -250,7 +289,7 @@ if ($d >= 1){
 if ($m <0){
 		$messageText= "Countdown complete! Your target is in the past.";
 	}else{
-		$messageText .= " ".$postText. " ".$eventName;
+		$messageText .= " ".$messagePostText. " ".$eventName;
 	}
 
 $messageText = preg_replace('!\s+!', ' ', $messageText);
