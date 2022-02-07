@@ -254,10 +254,6 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		to have the Pixel Overlay Model defined and this FPP will need to have the Pixel Overlay Model defined exactly as the Host FPP Device</p>
 	</div>
   
-</div>
-</div>
-	
-
 
 <script>
 updateOutputText();
