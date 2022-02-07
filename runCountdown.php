@@ -223,7 +223,7 @@ if ($subTime<0){
 $y = abs($subTime/(60*60*24*365));
 $d = abs(($subTime/(60*60*24))%365);
 $h = abs(($subTime/(60*60))%24);
-$m = abs(($subTime/60)%60 +1;
+$m = abs(($subTime/60)%60 +1);
 if ($elapsed){
 	$messagePreText = $countUpPreText;
 	$messagePostText = $countUpPostText;
