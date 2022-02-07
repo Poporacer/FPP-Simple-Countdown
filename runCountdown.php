@@ -286,7 +286,7 @@ if ($d >= 1){
 		}	
 	
 } 
-if ($m <0){//need to fix this
+if ($elapsed && $countup!="ON"){
 		$messageText= "Countdown complete! Your target is in the past.";
 	}else{
 		$messageText .= " ".$messagePostText. " ".$eventName;
