@@ -152,28 +152,27 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 		    $('#colpicker').colpickSetColor(color);
 		
 	}
-
 </script>
 
 </head>
 
-    	<div id="EventDate" class="settings">
-			<fieldset>
-				<legend><?php echo $pluginName . " Version: ". $pluginVersion;?> Installation Instructions</legend>
-				<p><b>This plugin requires ACCURATE date and time for its calculation.</b></p>
-				Configuration:
-				<ul>
-				<li>Configure the date and time of your event</li>
-				<li>Enter in the Pre Text and Post Text that will appear in your countdown</li>
-				<li>Enter the name of your Target date</li>
-				<li>Make sure you have your Pixel Overlay Model Selected (usually your Matrix)</li>
-				<li>The Countdown will display immediatly when activated by an FPP Command or Command Preset</li>
-				<li>If the remaining time is less than a day, the plugin will automatically display the hours and minutes remaining.</li>
-				<li>You can configure the plugin to display a message once the target date/time has been reached or</li>
-				<li>have the plugin start counting up from the target date/time.
-				</ul>
-			</fieldset>
-		</div>
+    <div id="EventDate" class="settings">
+		<fieldset>
+			<legend><?php echo $pluginName . " Version: ". $pluginVersion;?> Installation Instructions</legend>
+			<p><b>This plugin requires ACCURATE date and time for its calculation.</b></p>
+			Configuration:
+			<ul>
+			<li>Configure the date and time of your event</li>
+			<li>Enter in the Pre Text and Post Text that will appear in your countdown</li>
+			<li>Enter the name of your Target date</li>
+			<li>Make sure you have your Pixel Overlay Model Selected (usually your Matrix)</li>
+			<li>The Countdown will display immediatly when activated by an FPP Command or Command Preset</li>
+			<li>If the remaining time is less than a day, the plugin will automatically display the hours and minutes remaining.</li>
+			<li>You can configure the plugin to display a message once the target date/time has been reached or</li>
+			<li>have the plugin start counting up from the target date/time.
+			</ul>
+		</fieldset>
+	</div>
 	<div>
 		
 		<p>Target Date: <? PrintSettingSelect("MONTH", "MONTH", 0, 0, $defaultValue= "1", getMonths(), $pluginName, $callbackName = "updateOutputText", $changedFunction = ""); ?> 
@@ -247,10 +246,6 @@ $gitURL = "https://github.com/FalconChristmas/FPP-Simple-Countdown.git";
 			<li>Transparent RGB- This will display your message over the top of whatever is displaying on your matrix <br/>
 			the colors will override what is currently being displayed</li> 
 		</ul>
-		
-		
-		
-		
 		<p>ENABLE PLUGIN: <?PrintSettingCheckbox("Event Date Plugin", "ENABLED", 0, 0, "ON", "OFF", $pluginName ,$callbackName = "", $changedFunction=""); ?> </p>
 		<p>To report a bug, please file it against Simple Countdown plugin project on Git:<? echo $gitURL;?> </p>
 		<p>Host Location: <?  PrintSettingTextSaved("HOST_LOCATION", 0, 0, $maxlength = 16, $size = 16, $pluginName, $defaultValue = "127.0.0.1", $callbackName = "", $changedFunction = "", $inputType = "text", $sData = array());?> </p>
@@ -294,11 +289,12 @@ updateOutputText();
 function updateOutputTextMinutes(updateOutput){
 updateOutputText();	
 }
+
 function updateOutputText(){
-	
 	var messageText= getMessageText();
 	document.getElementById("scroll-text").innerHTML = messageText;
 }
+
 function getMessageText(){
 	var elapsed = false; 
 	var eventName = document.getElementById("EVENT_NAME").value;
@@ -332,8 +328,7 @@ function getMessageText(){
 		messageText= completedText;
 		return messageText;
 	}
-	
-			
+				
 	yearsToDate= Math.floor(Math.abs(yearsToDate));
 	daysToDate= Math.floor(Math.abs(daysToDate));
 	hoursToDate =Math.floor(Math.abs(hoursToDate));
@@ -356,7 +351,6 @@ function getMessageText(){
 		}else {
 			messageText += " " + yearsToDate + " year ";
 		}
-
 	}else{
 		messageText += " ";
 	}
@@ -405,7 +399,6 @@ function getMessageText(){
 		}	
 	}           
         
-	
 	messageText += messagePostText + " " + eventName;
 	return messageText;
 }
@@ -418,6 +411,7 @@ function ShowDuration(){
 		document.getElementById('showDuration').style.display = "none";
 	}
 }
+
 function ShowCountUp(){
 	if (document.getElementById('COUNT_UP').checked == true){
 		document.getElementById('showCountUp').style.display = "block";
